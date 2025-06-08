@@ -4,28 +4,34 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, Field, Session, create_engine, select
 from sqlalchemy import Column, JSON
 from typing import List, Optional, Dict
+from typing_extensions import Annotated
 from uuid import uuid4
+from pydantic import constr
 
-# ------------------------------
 # 1. MODELOS (con JSON en SQLite)
-# ------------------------------
+
+DateStr = Annotated[
+    str,
+    constr(
+        pattern=r"^\d{4}-\d{2}-\d{2}$",
+        strip_whitespace=True,
+        min_length=10,
+        max_length=10,
+    ),
+]
 
 class PlanBase(SQLModel):
-    nombre: str
-    responsable: str
-    objetivo: str
-    fecha: str        # ISO date "2025-06-07"
-    prioridad: str
-    descripcion: str
+    nombre: Annotated[str, Field(min_length=1)]
+    responsable: Annotated[str, Field(min_length=1)]
+    objetivo: Annotated[str, Field(min_length=1)]
+    fecha: DateStr        # ISO date "YYYY-MM-DD"
+    prioridad: Annotated[str, Field(min_length=1)]
+    descripcion: Annotated[str, Field(min_length=1)]
 
 class Plan(PlanBase, table=True):
     id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True)
-    acciones: List[Dict] = Field(
-        sa_column=Column(JSON), default_factory=list
-    )
-    feedback: Optional[Dict] = Field(
-        sa_column=Column(JSON), default=None
-    )
+    acciones: List[Dict] = Field(sa_column=Column(JSON), default_factory=list)
+    feedback: Optional[Dict] = Field(sa_column=Column(JSON), default=None)
 
 # ------------------------------
 # 2. BASE DE DATOS (SQLite)
@@ -39,7 +45,7 @@ def create_db_and_tables():
 # ------------------------------
 # 3. API
 # ------------------------------
-app = FastAPI(title="SmartPlans EAFIT API (SQLite + JSON)")
+app = FastAPI(title="SmartPlans EAFIT API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -48,9 +54,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/ping")
+def ping():
+    return {"ping": "pong"}
+
 @app.on_event("startup")
 def on_startup():
-    create_db_and_tables()
+    SQLModel.metadata.create_all(engine)
 
 @app.get("/planes", response_model=List[Plan])
 def listar_planes():
@@ -59,6 +69,7 @@ def listar_planes():
 
 @app.post("/planes", response_model=Plan, status_code=201)
 def crear_plan(plan: PlanBase):
+    # Pydantic validará todos los campos y el formato de 'fecha'
     nueva = Plan(**plan.dict())
     with Session(engine) as session:
         session.add(nueva)
