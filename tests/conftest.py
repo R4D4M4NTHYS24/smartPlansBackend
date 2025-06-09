@@ -1,30 +1,28 @@
- # ■ tests/conftest.py
-import os, sys, pathlib, pytest, json
-from sqlmodel import SQLModel, create_engine, Session
+# backend/tests/conftest.py
+import os, sys, pathlib, pytest
 from fastapi.testclient import TestClient
+from sqlmodel import SQLModel, create_engine, Session
 
- 
-os.environ.setdefault("OPENAI_API_KEY", "sk-test")
+# 1️⃣ pon una API-key dummy para que main.py no rompa
+os.environ["OPENAI_API_KEY"] = "sk-test"
 
- 
-ROOT_DIR = pathlib.Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT_DIR))
+# 2️⃣ mete la carpeta padre (la que contiene backend/) en sys.path
+ROOT = pathlib.Path(__file__).resolve().parents[1]  # va a …/backend
+sys.path.insert(0, str(ROOT))
 
-from main import app, get_session
+from backend.main import app, get_session
 
-@pytest.fixture(scope="session")
-def test_db():
-     engine = create_engine("sqlite:///:memory:", echo=False)
-     SQLModel.metadata.create_all(engine)
-     yield engine
-     engine.dispose()
+# 3️⃣ monta un SQLite en memoria y crea tablas
+engine = create_engine("sqlite:///:memory:", echo=False)
+SQLModel.metadata.create_all(engine)
 
 @pytest.fixture(scope="session")
-def client(test_db):
-     def _get_test_session():
-         with Session(test_db) as s:
-             yield s
+def client():
+    # factory para que Depend(get_session) use este engine
+    def _get_test_session():
+        with Session(engine) as s:
+            yield s
 
-     app.dependency_overrides[get_session] = _get_test_session
-     yield TestClient(app)
-     app.dependency_overrides.clear()
+    app.dependency_overrides[get_session] = _get_test_session
+    yield TestClient(app)
+    app.dependency_overrides.clear()
