@@ -9,6 +9,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    # ◀️ aquí le indicas que <run> se ejecute dentro de backend/
+    defaults:
+      run:
+        working-directory: backend
+
     steps:
       - uses: actions/checkout@v4
 
@@ -24,5 +29,5 @@ jobs:
 
       - name: Run pytest
         env:
-          OPENAI_API_KEY: sk-dummy
+          OPENAI_API_KEY: sk-dummy # evita romper main.py
         run: pytest -q
