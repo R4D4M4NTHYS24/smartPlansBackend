@@ -1,3 +1,5 @@
+# .github/workflows/ci.yml  (en la raíz de tu repo: ~/Desktop/Eafit/backend/.github/workflows/ci.yml)
+
 name: CI
 
 on:
@@ -9,13 +11,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # ◀️ aquí le indicas que <run> se ejecute dentro de backend/
-    defaults:
-      run:
-        working-directory: backend
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,5 +27,5 @@ jobs:
 
       - name: Run pytest
         env:
-          OPENAI_API_KEY: sk-dummy # evita romper main.py
+          OPENAI_API_KEY: sk-dummy # para que main.py no falle
         run: pytest -q
