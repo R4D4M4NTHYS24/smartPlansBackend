@@ -2,13 +2,15 @@
 import os, sys, pathlib, pytest, json
 from sqlmodel import SQLModel, create_engine, Session
 from fastapi.testclient import TestClient
-from main import app, get_session
+
  
 os.environ.setdefault("OPENAI_API_KEY", "sk-test")
 
  
-ROOT_DIR = pathlib.Path(__file__).resolve().parents[2]
+ROOT_DIR = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT_DIR))
+
+from main import app, get_session
 
 @pytest.fixture(scope="session")
 def test_db():
