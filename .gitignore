@@ -1,2 +1,15 @@
 .env       
 .env.*         
+
+# entornos virtuales
+.venv/
+
+# bases de datos temporales
+*.db
+*.bak
+*.dat
+*.dir
+
+# tests / cobertura
+.coverage
+htmlcov/
