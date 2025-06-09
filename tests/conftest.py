@@ -10,7 +10,7 @@ os.environ["OPENAI_API_KEY"] = "sk-test"
 ROOT = pathlib.Path(__file__).resolve().parents[1]  # va a …/backend
 sys.path.insert(0, str(ROOT))
 
-from backend.main import app, get_session
+from main import app, get_session
 
 # 3️⃣ monta un SQLite en memoria y crea tablas
 engine = create_engine("sqlite:///:memory:", echo=False)
