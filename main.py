@@ -133,7 +133,7 @@ Prioridad: {plan.prioridad}
 Descripción: {plan.descripcion}
 Acciones: {plan.acciones}
 """
-    chat = openai.chat.completions.create(
+    chat = openai.ChatCompletion.create(
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": PROMPT_SYSTEM},

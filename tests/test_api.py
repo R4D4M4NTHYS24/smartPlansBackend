@@ -11,7 +11,7 @@ def test_create_and_list_plan(client, mocker):
      }
      # Mock OpenAI
      mocker.patch(
-             "main.openai.chat.completions.create",
+        "main.openai.ChatCompletion.create",
          return_value=mocker.Mock(
              choices=[mocker.Mock(message=mocker.Mock(content=json.dumps(fake_fb)))]
          ),
