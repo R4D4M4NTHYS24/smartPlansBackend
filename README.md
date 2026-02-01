@@ -1,4 +1,4 @@
-# SmartPlans EAFIT API
+# SmartPlans API
 
 ![CI](https://github.com/R4D4M4NTHYS24/smartPlansBackend/actions/workflows/ci.yml/badge.svg)
 
