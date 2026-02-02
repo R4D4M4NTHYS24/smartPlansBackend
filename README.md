@@ -1,45 +1,55 @@
 # SmartPlans API
 
-![CI](https://github.com/R4D4M4NTHYS24/smartPlansBackend/actions/workflows/ci.yml/badge.svg)
-
-Esta API expone los endpoints de SmartPlans (FastAPI + SQLite + OpenAI).
-
----
+This API exposes SmartPlans endpoints (FastAPI + SQLite + OpenAI).
 
 ## Getting Started
 
-### Prerrequisitos
+### Prerequisites
+- Python >= 3.11 (recommended: 3.12)
 
-- Python ≥ 3.11
-- Clona este repo y copia tu `.env`:
-  ```bash
-  git clone https://github.com/R4D4M4NTHYS24/smartPlansBackend.git
-  cd smartPlansBackend/backend
-  cp .env.example .env
-  # Edita .env y pon tu OPENAI_API_KEY
-  ```
+### Clone the repository
 
-## Instalación
+git clone https://github.com/R4D4M4NTHYS24/smartPlansBackend.git
+cd smartPlansBackend
 
+## Create and activate a virtual environment
+
+### Windows (Git Bash):
+py -3.12 -m venv .venv
+source .venv/Scripts/activate
+
+## Windows (PowerShell):
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+## macOS / Linux:
+python3 -m venv .venv
+source .venv/bin/activate
+
+## Install dependencies
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-## Ejecutar la API
+## Environment variables
+### Create a .env file at the repo root:
+OPENAI_API_KEY=sk-...
 
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+## Run the API
+### python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
-## Endpoints principales
+## Verify
+Health check: http://localhost:8000/ping
+Swagger UI: http://localhost:8000/docs
 
-Método Ruta Descripción
-GET /ping Comprueba que la API está viva.
-GET /planes Lista todos los planes.
-POST /planes Crea un nuevo plan.
-GET /planes/{plan_id} Obtiene un plan por su ID.
-PUT /planes/{plan_id} Actualiza un plan existente.
-DELETE /planes/{plan_id} Borra un plan.
-POST /planes/{plan_id}/analyze Genera feedback IA para un plan.
+| Method | Route                       | Description                      |
+| ------ | --------------------------- | -------------------------------- |
+| GET    | `/ping`                     | Check that the API is alive.     |
+| GET    | `/planes`                   | List all plans.                  |
+| POST   | `/planes`                   | Create a new plan.               |
+| GET    | `/planes/{plan_id}`         | Get a plan by ID.                |
+| PUT    | `/planes/{plan_id}`         | Update an existing plan.         |
+| DELETE | `/planes/{plan_id}`         | Delete a plan.                   |
+| POST   | `/planes/{plan_id}/analyze` | Generate AI feedback for a plan. |
 
-## Ejecutar tests
-
-cd backend
+## Run tests
 pytest -q
