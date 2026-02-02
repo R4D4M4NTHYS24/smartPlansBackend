@@ -53,7 +53,7 @@ def init_db() -> None:
     SQLModel.metadata.create_all(engine)
 
 # --- app ----------------------------------------------------------------
-app = FastAPI(title="SmartPlans EAFIT API")
+app = FastAPI(title="SmartPlans API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
