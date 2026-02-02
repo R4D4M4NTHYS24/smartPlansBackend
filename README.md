@@ -1,6 +1,6 @@
 # SmartPlans API
 
-SmartPlans is a lightweight planning tool that lets users create strategic plans and generate AI-driven feedback (risks, suggestions, and an estimated impact) using the OpenAI API.  
+SmartPlans is a planning tool that lets users create strategic plans and generate AI-driven feedback (risks, suggestions, and an estimated impact) using the OpenAI API.  
 This repository contains the REST API built with FastAPI and SQLite.
 
 ## Getting Started
