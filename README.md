@@ -35,11 +35,11 @@ pip install -r requirements.txt
 OPENAI_API_KEY=sk-...
 
 ## Run the API
-### python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 ## Verify
-Health check: http://localhost:8000/ping
-Swagger UI: http://localhost:8000/docs
+- Health check: http://localhost:8000/ping
+- Swagger UI: http://localhost:8000/docs
 
 | Method | Route                       | Description                      |
 | ------ | --------------------------- | -------------------------------- |
